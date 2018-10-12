@@ -127,17 +127,17 @@ grammar Go;
     }
 }
 
-//SourceFile       = PackageClause ";" { ImportDecl ";" } { TopLevelDecl ";" } .
+// Source File - starting point of parcing
 sourceFile
     : packageClause eos ( importDecl eos )* ( topLevelDecl eos )*
     ;
 
-//PackageClause  = "package" PackageName .
-//PackageName    = identifier .
+// Package Clause
 packageClause
     : 'package' IDENTIFIER
     ;
 
+// Imports
 importDecl
     : 'import' ( importSpec | '(' ( importSpec eos )* ')' )
     ;
@@ -150,14 +150,14 @@ importPath
     : STRING_LIT
     ;
 
-//TopLevelDecl  = Declaration | FunctionDecl | MethodDecl .
+// Top Level Declaration
 topLevelDecl
     : declaration
     | functionDecl
     | methodDecl
     ;
 
-//Declaration   = ConstDecl | TypeDecl | VarDecl .
+// Declaration
 declaration
     : constDecl
     | typeDecl
@@ -165,44 +165,39 @@ declaration
     ;
 
 
-//ConstDecl      = "const" ( ConstSpec | "(" { ConstSpec ";" } ")" ) .
+// Constant Declaration
 constDecl
     : 'const' ( constSpec | '(' ( constSpec eos )* ')' )
     ;
 
-//ConstSpec      = IdentifierList [ [ Type ] "=" ExpressionList ] .
+// Const Spec
 constSpec
     : identifierList ( type? '=' expressionList )?
     ;
 
-//
-//IdentifierList = identifier { "," identifier } .
+
+// Identifier List
 identifierList
     : IDENTIFIER ( ',' IDENTIFIER )*
     ;
 
-//ExpressionList = Expression { "," Expression } .
+// Expression List
 expressionList
     : expression ( ',' expression )*
     ;
 
-//TypeDecl     = "type" ( TypeSpec | "(" { TypeSpec ";" } ")" ) .
+// Type Declaration
 typeDecl
     : 'type' ( typeSpec | '(' ( typeSpec eos )* ')' )
     ;
 
-//TypeSpec     = identifier Type .
+// Type Spec
 typeSpec
     : IDENTIFIER type
     ;
 
 
 // Function declarations
-
-//FunctionDecl = "func" FunctionName ( Function | Signature ) .
-//FunctionName = identifier .
-//Function     = Signature FunctionBody .
-//FunctionBody = Block .
 functionDecl
     : 'func' IDENTIFIER ( function | signature )
     ;
@@ -211,8 +206,7 @@ function
     : signature block
     ;
 
-//MethodDecl   = "func" Receiver MethodName ( Function | Signature ) .
-//Receiver     = Parameters .
+// Method Declaration
 methodDecl
     : 'func' receiver IDENTIFIER ( function | signature )
     ;
@@ -221,8 +215,7 @@ receiver
     : parameters
     ;
 
-//VarDecl     = "var" ( VarSpec | "(" { VarSpec ";" } ")" ) .
-//VarSpec     = IdentifierList ( Type [ "=" ExpressionList ] | "=" ExpressionList ) .
+// Variable Declaration
 varDecl
     : 'var' ( varSpec | '(' ( varSpec eos )* ')' )
     ;
@@ -232,12 +225,12 @@ varSpec
     ;
 
 
-//Block = "{" StatementList "}" .
+// Blocks - possibly empty sequences of declarations and statements within matching brace brackets.
 block
     : '{' statementList '}'
     ;
 
-//StatementList = { Statement ";" } .
+// Statement List
 statementList
     : ( statement eos )*
     ;
@@ -260,7 +253,7 @@ statement
     | deferStmt
 	;
 
-//SimpleStmt = EmptyStmt | ExpressionStmt | SendStmt | IncDecStmt | Assignment | ShortVarDecl .
+// Simple Statement
 simpleStmt
     : sendStmt
     | expressionStmt
@@ -270,34 +263,33 @@ simpleStmt
     | emptyStmt
     ;
 
-//ExpressionStmt = Expression .
+// Expression Statement
 expressionStmt
     : expression
     ;
 
-//SendStmt = Channel "<-" Expression .
-//Channel  = Expression .
+// Send Statement
 sendStmt
     : expression '<-' expression
     ;
 
-//IncDecStmt = Expression ( "++" | "--" ) .
+// Increment/Decrement Statement
 incDecStmt
     : expression ( '++' | '--' )
     ;
 
-//Assignment = ExpressionList assign_op ExpressionList .
+// Assignment
 assignment
     : expressionList assign_op expressionList
     ;
 
-//assign_op = [ add_op | mul_op ] "=" .
+// Assignment operator
 assign_op
     : ('+' | '-' | '|' | '^' | '*' | '/' | '%' | '<<' | '>>' | '&' | '&^')? '='
     ;
 
 
-//ShortVarDecl = IdentifierList ":=" ExpressionList .
+// Short Variable Declaration
 shortVarDecl
     : identifierList ':=' expressionList
     ;
@@ -306,55 +298,53 @@ emptyStmt
     : ';'
     ;
 
-//LabeledStmt = Label ":" Statement .
-//Label       = identifier .
+
+// Labeled Statement
 labeledStmt
     : IDENTIFIER ':' statement
     ;
 
-//ReturnStmt = "return" [ ExpressionList ] .
+// Return Statement
 returnStmt
     : 'return' expressionList?
     ;
 
-//BreakStmt = "break" [ Label ] .
+// Break Statement
 breakStmt
     : 'break' IDENTIFIER?
     ;
 
-//ContinueStmt = "continue" [ Label ] .
+// Continue Statement
 continueStmt
     : 'continue' IDENTIFIER?
     ;
 
-//GotoStmt = "goto" Label .
+// Goto Statement
 gotoStmt
     : 'goto' IDENTIFIER
     ;
 
-//FallthroughStmt = "fallthrough" .
+//Fallthrough Statement
 fallthroughStmt
     : 'fallthrough'
     ;
 
-//DeferStmt = "defer" Expression .
+// Defer Statement
 deferStmt
     : 'defer' expression
     ;
 
-//IfStmt = "if" [ SimpleStmt ";" ] Expression Block [ "else" ( IfStmt | Block ) ] .
+//If Statement
 ifStmt
     : 'if' (simpleStmt ';')? expression block ( 'else' ( ifStmt | block ) )?
     ;
 
-//SwitchStmt = ExprSwitchStmt | TypeSwitchStmt .
+// Switch Statement
 switchStmt
     : exprSwitchStmt | typeSwitchStmt
     ;
 
-//ExprSwitchStmt = "switch" [ SimpleStmt ";" ] [ Expression ] "{" { ExprCaseClause } "}" .
-//ExprCaseClause = ExprSwitchCase ":" StatementList .
-//ExprSwitchCase = "case" ExpressionList | "default" .
+// Expression Switch Statement
 exprSwitchStmt
     : 'switch' ( simpleStmt ';' )? expression? '{' exprCaseClause* '}'
     ;
@@ -367,11 +357,7 @@ exprSwitchCase
     : 'case' expressionList | 'default'
     ;
 
-//TypeSwitchStmt  = "switch" [ SimpleStmt ";" ] TypeSwitchGuard "{" { TypeCaseClause } "}" .
-//TypeSwitchGuard = [ identifier ":=" ] PrimaryExpr "." "(" "type" ")" .
-//TypeCaseClause  = TypeSwitchCase ":" StatementList .
-//TypeSwitchCase  = "case" TypeList | "default" .
-//TypeList        = Type { "," Type } .
+// Type Switch Statement
 typeSwitchStmt
     : 'switch' ( simpleStmt ';' )? typeSwitchGuard '{' typeCaseClause* '}'
     ;
@@ -389,11 +375,7 @@ typeList
     ;
 
 
-//SelectStmt = "select" "{" { CommClause } "}" .
-//CommClause = CommCase ":" StatementList .
-//CommCase   = "case" ( SendStmt | RecvStmt ) | "default" .
-//RecvStmt   = [ ExpressionList "=" | IdentifierList ":=" ] RecvExpr .
-//RecvExpr   = Expression .
+// Select Statement
 selectStmt
     : 'select' '{' commClause* '}'
     ;
@@ -407,45 +389,45 @@ recvStmt
     : ( expressionList '=' | identifierList ':=' )? expression
     ;
 
-//ForStmt = "for" [ Condition | ForClause | RangeClause ] Block .
-//Condition = Expression .
+
+// For Statement
 forStmt
     : 'for' ( expression | forClause | rangeClause )? block
     ;
 
-//ForClause = [ InitStmt ] ";" [ Condition ] ";" [ PostStmt ] .
-//InitStmt = SimpleStmt .
-//PostStmt = SimpleStmt .
+// For Clause
 forClause
     : simpleStmt? ';' expression? ';' simpleStmt?
     ;
 
 
-//RangeClause = [ ExpressionList "=" | IdentifierList ":=" ] "range" Expression .
+// Range Clause
 rangeClause
     : (expressionList '=' | identifierList ':=' )? 'range' expression
     ;
 
-//GoStmt = "go" Expression .
+// Go Statement
 goStmt
     : 'go' expression
     ;
 
-//Type      = TypeName | TypeLit | "(" Type ")" .
+
+// Types - set of values together with operations and methods specific to those values.
+
+//Type
 type
     : typeName
     | typeLit
     | '(' type ')'
     ;
 
-//TypeName  = identifier | QualifiedIdent .
+// Type Name
 typeName
     : IDENTIFIER
     | qualifiedIdent
     ;
 
-//TypeLit   = ArrayType | StructType | PointerType | FunctionType | InterfaceType |
-//	    SliceType | MapType | ChannelType .
+// Type Literals
 typeLit
     : arrayType
     | structType
@@ -457,7 +439,7 @@ typeLit
     | channelType
     ;
 
-
+// Array type
 arrayType
     : '[' arrayLength ']' elementType
     ;
@@ -470,32 +452,27 @@ elementType
     : type
     ;
 
-//PointerType = "*" BaseType .
-//BaseType    = Type .
+// Pointer Type
 pointerType
     : '*' type
     ;
 
-//InterfaceType      = "interface" "{" { MethodSpec ";" } "}" .
-//MethodSpec         = MethodName Signature | InterfaceTypeName .
-//MethodName         = identifier .
-//InterfaceTypeName  = TypeName .
+// Interface Type
 interfaceType
     : 'interface' '{' ( methodSpec eos )* '}'
     ;
 
-//SliceType = "[" "]" ElementType .
+// Slice Type
 sliceType
     : '[' ']' elementType
     ;
 
-//MapType     = "map" "[" KeyType "]" ElementType .
-//KeyType     = Type .
+// Map Type
 mapType
     : 'map' '[' type ']' elementType
     ;
 
-//ChannelType = ( "chan" | "chan" "<-" | "<-" "chan" ) ElementType .
+// Channel Type
 channelType
     : ( 'chan' | 'chan' '<-' | '<-' 'chan' ) elementType
     ;
@@ -507,12 +484,7 @@ methodSpec
     ;
 
 
-//FunctionType   = "func" Signature .
-//Signature      = Parameters [ Result ] .
-//Result         = Parameters | Type .
-//Parameters     = "(" [ ParameterList [ "," ] ] ")" .
-//ParameterList  = ParameterDecl { "," ParameterDecl } .
-//ParameterDecl  = [ IdentifierList ] [ "..." ] Type .
+// Function Type
 functionType
     : 'func' signature
     ;
@@ -539,7 +511,7 @@ parameterDecl
     : identifierList? '...'? type
     ;
 
-// TODO current pointer
+
 // OPERANDS
 
 // Operand
