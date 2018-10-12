@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/GoParser.iml" filepath="$PROJECT_DIR$/.idea/modules/GoParser.iml" />
       <module fileurl="file://$PROJECT_DIR$/GoParser.iml" filepath="$PROJECT_DIR$/GoParser.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/GoParser_main.iml" filepath="$PROJECT_DIR$/.idea/modules/GoParser_main.iml" group="GoParser" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/GoParser_test.iml" filepath="$PROJECT_DIR$/.idea/modules/GoParser_test.iml" group="GoParser" />

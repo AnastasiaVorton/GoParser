@@ -127,7 +127,7 @@ grammar Go;
     }
 }
 
-// Source File - starting point of parcing
+// Source File - starting point of parsing
 sourceFile
     : packageClause eos ( importDecl eos )* ( topLevelDecl eos )*
     ;
