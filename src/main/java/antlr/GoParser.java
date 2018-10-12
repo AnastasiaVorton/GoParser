@@ -27,7 +27,7 @@ public class GoParser extends Parser {
 		T__52=53, T__53=54, T__54=55, T__55=56, T__56=57, T__57=58, T__58=59, 
 		T__59=60, T__60=61, IDENTIFIER=62, KEYWORD=63, BINARY_OP=64, INT_LIT=65, 
 		FLOAT_LIT=66, IMAGINARY_LIT=67, RUNE_LIT=68, LITTLE_U_VALUE=69, BIG_U_VALUE=70, 
-		STRING_LIT=71, WS=72, COMMENT=73, TERMINATOR=74, LINE_COMMENT=75;
+		STRING_LIT=71, WHITE_SPACE=72, COMMENT=73, TERMINATOR=74, LINE_COMMENT=75;
 	public static final int
 		RULE_sourceFile = 0, RULE_packageClause = 1, RULE_importDecl = 2, RULE_importSpec = 3, 
 		RULE_importPath = 4, RULE_topLevelDecl = 5, RULE_declaration = 6, RULE_constDecl = 7, 
@@ -96,7 +96,7 @@ public class GoParser extends Parser {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, "IDENTIFIER", "KEYWORD", "BINARY_OP", "INT_LIT", "FLOAT_LIT", 
 		"IMAGINARY_LIT", "RUNE_LIT", "LITTLE_U_VALUE", "BIG_U_VALUE", "STRING_LIT", 
-		"WS", "COMMENT", "TERMINATOR", "LINE_COMMENT"
+		"WHITE_SPACE", "COMMENT", "TERMINATOR", "LINE_COMMENT"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -169,7 +169,7 @@ public class GoParser extends Parser {
 	            return true;
 	        }
 
-	        if (ahead.getType() == WS) {
+	        if (ahead.getType() == WHITE_SPACE) {
 	            // Get the token ahead of the current whitespaces.
 	            possibleIndexEosToken = this.getCurrentToken().getTokenIndex() - 2;
 	            ahead = _input.get(possibleIndexEosToken);
