@@ -3,5 +3,6 @@ package main
 import "fmt"
 
 func main() {
-    fmt.Println("hello world")
+    var год int = 2018
+    fmt.Println(год)
 }
