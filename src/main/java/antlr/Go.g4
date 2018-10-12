@@ -539,14 +539,10 @@ parameterDecl
     : identifierList? '...'? type
     ;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Operands
+// TODO current pointer
+// OPERANDS
 
-//Operand     = Literal | OperandName | MethodExpr | "(" Expression ")" .
-//Literal     = BasicLit | CompositeLit | FunctionLit .
-//BasicLit    = int_lit | float_lit | imaginary_lit | rune_lit | string_lit .
-//OperandName = identifier | QualifiedIdent.
-
+// Operand
 operand
     : literal
     | operandName
@@ -554,12 +550,14 @@ operand
     | '(' expression ')'
     ;
 
+// Literal
 literal
     : basicLit
     | compositeLit
     | functionLit
     ;
 
+// Basic Literal
 basicLit
     : INT_LIT
     | FLOAT_LIT
@@ -568,25 +566,17 @@ basicLit
     | STRING_LIT
     ;
 
+// Operand Name
 operandName
     : IDENTIFIER
     | qualifiedIdent
     ;
 
-//QualifiedIdent = PackageName "." identifier .
+
+// Qualified identifiers - identifierы qualified with a package name prefix.
 qualifiedIdent
     : IDENTIFIER '.' IDENTIFIER
     ;
-
-//CompositeLit  = LiteralType LiteralValue .
-//LiteralType   = StructType | ArrayType | "[" "..." "]" ElementType |
-//                SliceType | MapType | TypeName .
-//LiteralValue  = "{" [ ElementList [ "," ] ] "}" .
-//ElementList   = KeyedElement { "," KeyedElement } .
-//KeyedElement  = [ Key ":" ] Element .
-//Key           = FieldName | Expression | LiteralValue .
-//FieldName     = identifier .
-//Element       = Expression | LiteralValue .
 
 compositeLit
     : literalType literalValue
@@ -624,10 +614,8 @@ element
     | literalValue
     ;
 
-//StructType     = "struct" "{" { FieldDecl ";" } "}" .
-//FieldDecl      = (IdentifierList Type | AnonymousField) [ Tag ] .
-//AnonymousField = [ "*" ] TypeName .
-//Tag            = string_lit .
+
+// Struct types
 structType
     : 'struct' '{' ( fieldDecl eos )* '}'
     ;
@@ -640,28 +628,13 @@ anonymousField
     : '*'? typeName
     ;
 
-//FunctionLit = "func" Function .
+
+//Function Literals
 functionLit
     : 'func' function
     ;
 
-//PrimaryExpr =
-//	Operand |
-//	Conversion |
-//	PrimaryExpr Selector |
-//	PrimaryExpr Index |
-//	PrimaryExpr Slice |
-//	PrimaryExpr TypeAssertion |
-//	PrimaryExpr Arguments .
-//
-//Selector       = "." identifier .
-//Index          = "[" Expression "]" .
-//Slice          = "[" ( [ Expression ] ":" [ Expression ] ) |
-//                     ( [ Expression ] ":" Expression ":" Expression )
-//                 "]" .
-//TypeAssertion  = "." "(" Type ")" .
-//Arguments      = "(" [ ( ExpressionList | Type [ "," ExpressionList ] ) [ "..." ] [ "," ] ] ")" .
-
+// Primary expression
 primaryExpr
     : operand
     | conversion
@@ -672,14 +645,17 @@ primaryExpr
 	| primaryExpr arguments
     ;
 
+// Selector
 selector
     : '.' IDENTIFIER
     ;
 
+//Index
 index
     : '[' expression ']'
     ;
 
+//Slice
 slice
     : '[' (( expression? ':' expression? ) | ( expression? ':' expression ':' expression )) ']'
     ;
@@ -692,33 +668,33 @@ arguments
     : '(' ( ( expressionList | type ( ',' expressionList )? ) '...'? ','? )? ')'
     ;
 
-//MethodExpr    = ReceiverType "." MethodName .
-//ReceiverType  = TypeName | "(" "*" TypeName ")" | "(" ReceiverType ")" .
+// Method Expression
 methodExpr
     : receiverType '.' IDENTIFIER
     ;
 
+// Receiver type
 receiverType
     : typeName
     | '(' '*' typeName ')'
     | '(' receiverType ')'
     ;
 
-//Expression = UnaryExpr | Expression binary_op Expression .
-//UnaryExpr  = PrimaryExpr | unary_op UnaryExpr .
 
+// Expressions
+// Expression - unary or with binary operator.
 expression
     : unaryExpr
-//    | expression BINARY_OP expression
     | expression ('||' | '&&' | '==' | '!=' | '<' | '<=' | '>' | '>=' | '+' | '-' | '|' | '^' | '*' | '/' | '%' | '<<' | '>>' | '&' | '&^') expression
     ;
 
+// Unary Expression
 unaryExpr
     : primaryExpr
     | ('+'|'-'|'!'|'^'|'*'|'&'|'<-') unaryExpr
     ;
 
-//Conversion = Type "(" Expression [ "," ] ")" .
+// Conversion = casting to some type.
 conversion
     : type '(' expression ','? ')'
     ;
