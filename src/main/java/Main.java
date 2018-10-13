@@ -25,14 +25,12 @@ public class Main {
     }
 
     private static void traverse(ParseTree tree, Map<String, Object> map) {
-
         if (tree instanceof TerminalNodeImpl) {
             Token token = ((TerminalNodeImpl) tree).getSymbol();
 
             map.put("type", GoParser.VOCABULARY.getSymbolicName(token.getType()));
             map.put("text", token.getText());
-        }
-        else {
+        } else {
             List<Map<String, Object>> children = new ArrayList<>();
             String name = tree.getClass().getSimpleName().replaceAll("Context$", "");
             map.put(Character.toLowerCase(name.charAt(0)) + name.substring(1), children);
