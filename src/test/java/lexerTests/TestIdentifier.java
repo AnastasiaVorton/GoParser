@@ -1,67 +1,52 @@
 package lexerTests;
 
 import antlr.GoLexer;
-import antlr.GoParser;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.antlr.v4.runtime.Token;
 
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static shared.Assert.assertToken;
+
+/**
+ * A class that contains test cases for Go identifiers.
+ */
 public class TestIdentifier {
 
-    private static GoLexer lexer = new GoLexer(null);
-    private static GoParser parser = new GoParser(null);
-
-    private final int token_id = lexer.IDENTIFIER;
-
-
-    @Test
-    public void test1() {
-        String expr = "lol_kek_cheburek";
-        lexer.setInputStream(CharStreams.fromString(expr));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser.setTokenStream(tokens);
-        ParseTree tree = parser.sourceFile();
-
-        String text = tokens.get(0).getText(); // token text
-        int type = tokens.get(0).getType(); // token type (int)
-
-        assertEquals(tokens.size(), 2);
-        assertEquals(text, "lol_kek_cheburek");
-        assertEquals(type, token_id);
+    private static void assertIdentifier(String expr) throws AssertionError {
+        Token token = Utils.getTokens(expr).get(0);
+        assertToken(token, GoLexer.IDENTIFIER, expr);
     }
 
     @Test
-    public void test2() {
-        String expr2 = "ident_with_number_2";
-        lexer.setInputStream(CharStreams.fromString(expr2));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser.setTokenStream(tokens);
-        ParseTree tree = parser.sourceFile();
-
-        String text = tokens.get(0).getText(); // token text
-        int type = tokens.get(0).getType(); // token type (int)
-
-        assertEquals(tokens.size(), 2);
-        assertEquals(text, "ident_with_number_2");
-        assertEquals(type, token_id);
+    public void simpleIdentifier() {
+        assertIdentifier("cheburek");
     }
 
     @Test
-    public void test3() {
-        String expr3 = "2_ident_with_number";
-        lexer.setInputStream(CharStreams.fromString(expr3));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser.setTokenStream(tokens);
-        ParseTree tree = parser.sourceFile();
+    public void complexIdentifier() {
+        assertIdentifier("ident_with_number_2");
+    }
 
-        String text = tokens.get(0).getText(); // token text
-        int type = tokens.get(0).getType(); // token type (int)
+    @Test
+    public void unicodeIdentifier() {
+        assertIdentifier("спасибо_зуеву_за_курс");
+    }
 
-        assertEquals(tokens.size(), 3);
-        assertEquals(text, "2");
+    @Test
+    public void invalidIdentifier() {
+        String expr = "2_ident_with_number";
+        List<? extends Token> tokens = Utils.getTokens(expr);
+        assertEquals(2, tokens.size());
+
+        Token first = tokens.get(0);
+        Token second = tokens.get(1);
+
+        assertToken(first, GoLexer.INT_LIT, expr.substring(0, 1));
+        assertToken(second, GoLexer.IDENTIFIER, expr.substring(1));
     }
 
 }

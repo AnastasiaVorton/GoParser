@@ -1,11 +1,8 @@
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import antlr.GoLexer;
 import antlr.GoParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 
 public class GoParserTest {
