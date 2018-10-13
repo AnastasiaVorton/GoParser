@@ -1,4 +1,4 @@
-// Generated from /Users/anastasia/IdeaProjects/GoParser/src/main/java/antlr/Go.g4 by ANTLR 4.7
+// Generated from /Users/bulatkhabiroff/IdeaProjects/GoParser/src/main/java/antlr/Go.g4 by ANTLR 4.7
 package antlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
