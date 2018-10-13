@@ -19,10 +19,27 @@ public class GoParserTest {
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     GoParser parser = new GoParser(tokens);
 
+//    boolean isEqual<T1, T2>(T1 tree1, T2 tree2) {
+//        if (instanceOf T1 == instanceOf T2) {
+//            if (children.isEmpty) {
+//                return true;
+//            }
+//            for (int i = 0; i < tree1.children().length; i++) {
+//                return isEqual(tree1.children[i], tree2.children[i]);
+//            }
+//        }
+//        else
+//            return false;
+//    }
+
+
     @Test
     public void oneLineCommentsShouldBeDetected() {
 //        assertTrue(parser.getTokenStream().getText(), );
 //        assertTrue(GoParser.match("// THIS //IS COMMENT //IN ONE LINE"), "// THIS //IS COMMENT //IN ONE LINE");
+//        t1 = ...
+//        t2 = parser.parse`
+//        assertTrue(isEqual(t1, t2));
     }
 //
 //    @Test
