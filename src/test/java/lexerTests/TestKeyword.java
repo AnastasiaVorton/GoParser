@@ -4,49 +4,36 @@ import antlr.GoLexer;
 import antlr.GoParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
+import static shared.Assert.assertToken;
 
 public class TestKeyword {
 
-    private static GoLexer lexer = new GoLexer(null);
-    private static GoParser parser = new GoParser(null);
-
-    private final int token_identifier = lexer.IDENTIFIER;
-    private final int token_keyword = 32;
-
-    @Test
-    public void test1() {
-        String expr = "break";
-        lexer.setInputStream(CharStreams.fromString(expr));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser.setTokenStream(tokens);
-        ParseTree tree = parser.sourceFile();
-
-        String text = tokens.get(0).getText(); // token text
-        int type = tokens.get(0).getType(); // token type (int)
-
-        assertEquals(tokens.size(), 2);
-        assertEquals(text, "break");
-        assertEquals(type, token_keyword);
+    private static void assertKeyword(String expr) throws AssertionError {
+        Token token = Utils.getTokens(expr).get(0);
+        assertToken(token, 32, expr);
     }
 
     @Test
-    public void test2() {
-        String expr2 = "ifif";
-        lexer.setInputStream(CharStreams.fromString(expr2));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser.setTokenStream(tokens);
-        ParseTree tree = parser.sourceFile();
+    public void breakKeyword() {
+        assertKeyword("break");
+    }
 
-        String text = tokens.get(0).getText(); // token text
-        int type = tokens.get(0).getType(); // token type (int)
+    @Test
+    public void invalidKeyword() {
+        String expr = "ifif";
+        List<? extends Token> tokens = Utils.getTokens(expr);
+        assertEquals(1, tokens.size());
 
-        assertEquals(tokens.size(), 2);
-        assertEquals(text, "ifif");
-        assertEquals(type, token_identifier);
+        Token first = tokens.get(0);
+
+        assertToken(first, GoLexer.IDENTIFIER, expr.substring(0, 4));
     }
 
 }

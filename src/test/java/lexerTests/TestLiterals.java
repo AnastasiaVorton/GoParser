@@ -4,131 +4,73 @@ import antlr.GoLexer;
 import antlr.GoParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static shared.Assert.assertToken;
 
 public class TestLiterals {
 
-    private static GoLexer lexer = new GoLexer(null);
-    private static GoParser parser = new GoParser(null);
+    private static void assertIntLiteral(String expr) throws AssertionError {
+        Token token = Utils.getTokens(expr).get(0);
+        assertToken(token, GoLexer.INT_LIT, expr);
+    }
 
-    int token_1 = lexer.INT_LIT;
-    int token_2 = lexer.FLOAT_LIT;
-    int token_3 = lexer.IMAGINARY_LIT;
-    int token_4 = lexer.RUNE_LIT;
-    int token_5 = lexer.STRING_LIT;
+    private static void assertFloatLiteral(String expr) throws AssertionError {
+        Token token = Utils.getTokens(expr).get(0);
+        assertToken(token, GoLexer.FLOAT_LIT, expr);
+    }
 
-    @Test
-    public void testInt1() {
-        String expr = "132";
-        lexer.setInputStream(CharStreams.fromString(expr));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser.setTokenStream(tokens);
-        ParseTree tree = parser.sourceFile();
+    private static void assertImagLiteral(String expr) throws AssertionError {
+        Token token = Utils.getTokens(expr).get(0);
+        assertToken(token, GoLexer.IMAGINARY_LIT, expr);
+    }
 
-        String text = tokens.get(0).getText();
-        int type = tokens.get(0).getType();
+    private static void assertRuneLiteral(String expr) throws AssertionError {
+        Token token = Utils.getTokens(expr).get(0);
+        assertToken(token, GoLexer.RUNE_LIT, expr);
+    }
 
-        assertEquals(tokens.size(), 2);
-        assertEquals(text, "132");
-        assertEquals(type, token_1);
+    private static void assertStrLiteral(String expr) throws AssertionError {
+        Token token = Utils.getTokens(expr).get(0);
+        assertToken(token, GoLexer.STRING_LIT, expr);
     }
 
     @Test
-    public void testInt2() {
-        String expr = "07";
-        lexer.setInputStream(CharStreams.fromString(expr));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser.setTokenStream(tokens);
-        ParseTree tree = parser.sourceFile();
-
-        String text = tokens.get(0).getText();
-        int type = tokens.get(0).getType();
-
-        assertEquals(tokens.size(), 2);
-        assertEquals(text, "07");
-        assertEquals(type, token_1);
+    public void intLiteralDecimal() {
+        assertIntLiteral("132");
     }
 
     @Test
-    public void testInt3() {
-        String expr = "0xF4";
-        lexer.setInputStream(CharStreams.fromString(expr));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser.setTokenStream(tokens);
-        ParseTree tree = parser.sourceFile();
-
-        String text = tokens.get(0).getText();
-        int type = tokens.get(0).getType();
-
-        assertEquals(tokens.size(), 2);
-        assertEquals(text, "0xF4");
-        assertEquals(type, token_1);
+    public void intLiteralOctal() {
+        assertIntLiteral("07");
     }
 
     @Test
-    public void testFloat1() {
-        String expr = "132.51";
-        lexer.setInputStream(CharStreams.fromString(expr));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser.setTokenStream(tokens);
-        ParseTree tree = parser.sourceFile();
-
-        String text = tokens.get(0).getText();
-        int type = tokens.get(0).getType();
-
-        assertEquals(tokens.size(), 2);
-        assertEquals(text, "132.51");
-        assertEquals(type, token_2);
+    public void intLiteralHex() {
+        assertIntLiteral("0xF4");
     }
 
     @Test
-    public void testImaginary1() {
-        String expr = "5i";
-        lexer.setInputStream(CharStreams.fromString(expr));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser.setTokenStream(tokens);
-        ParseTree tree = parser.sourceFile();
-
-        String text = tokens.get(0).getText();
-        int type = tokens.get(0).getType();
-
-        assertEquals(tokens.size(), 2);
-        assertEquals(text, "5i");
-        assertEquals(type, token_3);
+    public void floatLiteral() {
+        assertFloatLiteral("132.51");
     }
 
     @Test
-    public void testRune1() {
-        String expr = "'a'";
-        lexer.setInputStream(CharStreams.fromString(expr));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser.setTokenStream(tokens);
-        ParseTree tree = parser.sourceFile();
-
-        String text = tokens.get(0).getText();
-        int type = tokens.get(0).getType();
-
-        assertEquals(tokens.size(), 2);
-        assertEquals(text, "'a'");
-        assertEquals(type, token_4);
+    public void imaginaryLiteral() {
+        assertImagLiteral("5i");
     }
 
     @Test
-    public void testString1() {
-        String expr = "`a string literal`";
-        lexer.setInputStream(CharStreams.fromString(expr));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser.setTokenStream(tokens);
-        ParseTree tree = parser.sourceFile();
-
-        String text = tokens.get(0).getText();
-        int type = tokens.get(0).getType();
-
-        assertEquals(tokens.size(), 2);
-        assertEquals(text, "`a string literal`");
-        assertEquals(type, token_5);
+    public void runeLiteral() {
+        assertRuneLiteral("'a'");
     }
+
+    @Test
+    public void strLiteral() {
+        assertStrLiteral("`a string literal`");
+    }
+
 }
