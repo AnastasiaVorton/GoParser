@@ -3,8 +3,6 @@ package parserTests;
 import antlr.GoParser;
 import org.antlr.v4.runtime.NoViableAltException;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.pattern.ParseTreeMatch;
-import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 import org.junit.Test;
 
 import static parserTests.Utils.assertTree;
