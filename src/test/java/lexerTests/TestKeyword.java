@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
-import static shared.Assert.assertToken;
+import static lexerTests.Utils.assertToken;
 
 public class TestKeyword {
 
