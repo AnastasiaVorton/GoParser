@@ -17,7 +17,7 @@ public class TestKeyword {
 
     private static void assertKeyword(String expr) throws AssertionError {
         Token token = Utils.getTokens(expr).get(0);
-        assertToken(token, 32, expr);
+
     }
 
     @Test
