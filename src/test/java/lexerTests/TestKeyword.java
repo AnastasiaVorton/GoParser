@@ -39,7 +39,7 @@ public class TestKeyword {
                 + "import "
                 + "return "
                 + "var";
-        
+
         String[] lexemes = allKeywords.split(" ");
         List<? extends Token> tokens = Utils.getTokens(allKeywords).stream()
                 .filter(t -> !t.getText().equals(" ")).collect(Collectors.toList());
