@@ -1,14 +1,10 @@
 package lexerTests;
 
 import antlr.GoLexer;
-import antlr.GoParser;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTree;
+import org.junit.ComparisonFailure;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 import static shared.Assert.assertToken;
 
 public class TestLiterals {
@@ -23,7 +19,7 @@ public class TestLiterals {
         assertToken(token, GoLexer.FLOAT_LIT, expr);
     }
 
-    private static void assertImagLiteral(String expr) throws AssertionError {
+    private static void assertImaginaryLiteral(String expr) throws AssertionError {
         Token token = Utils.getTokens(expr).get(0);
         assertToken(token, GoLexer.IMAGINARY_LIT, expr);
     }
@@ -59,8 +55,28 @@ public class TestLiterals {
     }
 
     @Test
+    public void floatLiteralShort() {
+        assertFloatLiteral("132.");
+    }
+
+    @Test
+    public void floatLiteralExp() {
+        assertFloatLiteral("132.51e+5");
+    }
+
+    @Test
+    public void floatLiteralShortLeft() {
+        assertFloatLiteral(".51");
+    }
+
+    @Test
     public void imaginaryLiteral() {
-        assertImagLiteral("5i");
+        assertImaginaryLiteral("5i");
+    }
+
+    @Test
+    public void imaginaryFloatLiteral() {
+        assertImaginaryLiteral(".25i");
     }
 
     @Test
@@ -68,9 +84,26 @@ public class TestLiterals {
         assertRuneLiteral("'a'");
     }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void illegalBacklashRuneLiteral() {
+        assertRuneLiteral("'\\d'");
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void illegalManyCharactersRuneLiteral() {
+        assertRuneLiteral("'aa'");
+    }
+
     @Test
     public void strLiteral() {
         assertStrLiteral("`a string literal`");
     }
 
+    @Test
+    public void multilineRawStrLiteral() {
+        assertStrLiteral("`sweet dreams\n are made of memes`");
+    }
+
+    @Test(expected = ComparisonFailure.class)
+    public void illegalMultilineInterpretedStrLiteral() { assertStrLiteral("\"who am I\nto disagree\""); }
 }

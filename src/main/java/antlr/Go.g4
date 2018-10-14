@@ -899,7 +899,8 @@ fragment NEWLINE
     ;
 
 // Unicode char, an arbitrary Unicode code point except newline.
-fragment UNICODE_CHAR   : ~[\u000A]
+fragment UNICODE_CHAR
+    : ~[\u000A]
     ;
 
 // Unicode letters, because Go supports unicode in identifiers, etc.
