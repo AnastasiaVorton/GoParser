@@ -3,7 +3,7 @@ package lexerTests;
 import org.antlr.v4.runtime.Token;
 import org.junit.Test;
 
-import static shared.Assert.assertToken;
+import static lexerTests.Utils.assertToken;
 
 
 public class TestOperators {
