@@ -13,19 +13,21 @@ the input file. The grammar for the language was done referencing official
 
 There are separate files that list the tokens, classes for lexer and parser. 
 
-We also decided to describe the grammar for the whole language and not only for the specified language constructs. 
+We also decided to describe the grammar for the whole language and not only for the specified language constructs. Also
+all unicode values are supported, since Go allows usage of non-latin alphabets for identifier declaration. 
 
 To represent the result of the parsing we used [GSON](https://github.com/google/gson) library that converts Java objects
- to JSON.
+ to JSON. In our case parser's tree is converted to JSON and written to [out.txt](.out.txt) file. 
+
  
 ## Testing
 A great part of the work was dedicated to testing the grammar we described. The grammar itself consists of grammar rules
 and tokens description. The former is written using EBNF form and the latter - using regular expressions and unicode 
 values. 
-There are separate test classes for Lexer and Parser. 
-To test the program do the following steps: 
-- If the project was not build yet run: _gradle build_
-- run: _gradle test_
+Lexer and Parser were tested separately. For the lexer - all groups of of tokens were tested. For the parser - there
+ are tests for each of the structure specified in Moodle as obligatory.  
+There are separate packages for Lexer and Parser. Can be found in [test](./src/test) folder. 
+
 
 ## How to run 
 
@@ -34,6 +36,7 @@ If you use UNIX system substitute gradle for ./gradlew and if you use windows - 
 - Step 1: cd project folder
 - Step 2: gradle build
 - Step 3: gradle run
+- Step 4: (for tests) gradle test
 
 ## Last words
    
