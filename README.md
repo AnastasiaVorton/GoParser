@@ -31,12 +31,12 @@ There are separate packages for Lexer and Parser. Can be found in [test](./src/t
 
 ## How to run 
 
-If you use UNIX system substitute gradle for ./gradlew and if you use windows - substitute for gradlew.bat:
+If you use UNIX system substitute `gradle` for `./gradlew` and if you use Windows — substitute for `gradlew.bat`:
 
-- Step 1: cd project folder
-- Step 2: gradle build
-- Step 3: gradle run
-- Step 4: (for tests) gradle test
+- Step 1: `cd project folder`
+- Step 2: `gradle build`
+- Step 3: `gradle run`
+- Step 4: (for tests) `gradle test`
 
 ## Last words
    
